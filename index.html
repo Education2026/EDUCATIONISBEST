@@ -1,348 +1,538 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Education Is Best Network</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#f0f4fa;color:#17243a}
-header{background:#123b70;color:white;text-align:center;padding:25px 10px}
-header h2{margin:0}
-.container{max-width:600px;margin:20px auto;padding:12px}
-.card{background:white;padding:20px;border-radius:12px;margin-bottom:15px;box-shadow:0 2px 10px #0001}
-h3{color:#123b70}
-input{width:100%;padding:13px;margin:8px 0;border:1px solid #ccc;border-radius:7px}
-button{padding:12px;border:0;border-radius:7px;background:#1764b0;color:white;font-weight:bold;cursor:pointer;margin:5px 0}
-.full{width:100%}
-.secondary{background:#e7eef8;color:#123b70}
-.hidden{display:none}
-nav{display:flex;flex-wrap:wrap;justify-content:center;background:white;padding:8px}
-nav button{font-size:12px}
-.info{background:#eaf3ff;padding:13px;border-radius:8px;overflow-wrap:anywhere}
-.member{padding:10px;border-bottom:1px solid #ddd}
-#message{padding:10px;overflow-wrap:anywhere}
-</style>
-</head>
-<body>
-
-<header>
-<h2>EDUCATION IS BEST NETWORK</h2>
-<p>FREE REGISTRATION & NETWORKING</p>
-</header>
-
-<nav id="nav" class="hidden">
-<button onclick="page('dashboard')">Dashboard</button>
-<button onclick="page('referral')">Referral</button>
-<button onclick="page('network')">My Network</button>
-<button onclick="page('profile')">Profile</button>
-<button onclick="logout()">Logout</button>
-</nav>
-
-<div class="container">
-
-<div class="card" id="home">
-<h3>Welcome to Our Network</h3>
-<p>Join our free networking platform.</p>
-<button class="full" onclick="page('register')">FREE REGISTRATION</button>
-<button class="full secondary" onclick="page('login')">LOGIN</button>
-</div>
-
-<div class="card hidden" id="register">
-<h3>Free Registration</h3>
-<form id="regForm">
-<input id="name" placeholder="Full Name" required>
-<input id="email" type="email" placeholder="Email Address" required>
-<input id="password" type="password" placeholder="Password (8 characters)" minlength="8" required>
-<input id="ref" placeholder="Referral ID (Optional)">
-<button class="full" id="regButton">Create Account</button>
-</form>
-<button class="secondary" onclick="page('home')">Back</button>
-</div>
-
-<div class="card hidden" id="login">
-<h3>Member Login</h3>
-<form id="loginForm">
-<input id="loginEmail" type="email" placeholder="Email" required>
-<input id="loginPassword" type="password" placeholder="Password" required>
-<button class="full" id="loginButton">Login</button>
-</form>
-<button class="secondary" onclick="page('home')">Back</button>
-</div>
-
-<div class="card hidden" id="dashboard">
-<h3>Member Dashboard</h3>
-<p>Welcome, <b id="welcomeName"></b></p>
-<div class="info">
-<p>My Referral ID</p>
-<b id="myId"></b>
-</div>
-<p>My Role: <b id="myRole"></b></p>
-<p>Direct Members: <b id="direct">0</b></p>
-<p>Total Network: <b id="total">0</b></p>
-</div>
-
-<div class="card hidden" id="referral">
-<h3>My Referral Link</h3>
-<div class="info" id="myLink"></div>
-<button class="full" onclick="copyLink()">Copy Referral Link</button>
-</div>
-
-<div class="card hidden" id="network">
-<h3>My Direct Members</h3>
-<div id="members">No members yet.</div>
-</div>
-
-<div class="card hidden" id="profile">
-<h3>My Profile</h3>
-<p>Name: <b id="pName"></b></p>
-<p>Email: <b id="pEmail"></b></p>
-<p>Referral ID: <b id="pId"></b></p>
-<p>Role: <b id="pRole"></b></p>
-</div>
-
-<p id="message"></p>
-</div>
-
-<script>
-const SUPABASE_URL = "https://dunsacirxgpgkvfodirn.supabase.co";
-const SUPABASE_KEY = "sb_publishable_DSJVw_0LOH57cPinEBgsQQ_xU7Y8Zie";
-
-const sb = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-let currentUser = null;
-let currentProfile = null;
-
-function page(id) {
-  ["home","register","login","dashboard","referral","network","profile"]
-  .forEach(x => document.getElementById(x).classList.add("hidden"));
-
-  document.getElementById(id).classList.remove("hidden");
-
-  document.getElementById("nav").classList.toggle(
-    "hidden",
-    !["dashboard","referral","network","profile"].includes(id)
-  );
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Education Is Best Network</title>  
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
+<style>  
+  
+* {
+  box-sizing: border-box;
 }
 
-function message(text) {
-  document.getElementById("message").textContent = text;
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f7fd;
+  color: #172b4d;
+  line-height: 1.6;
 }
 
-function escapeText(s) {
-  return String(s || "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #082b59, #1764b0);
+  color: white;
+  text-align: center;
+  padding: 35px 15px;
+  border-bottom: 4px solid #e9bd4e;
 }
 
-async function showDashboard(user) {
-  currentUser = user;
-
-  message("Loading your account...");
-
-  const {data: profile, error} = await sb
-    .from("profiles")
-    .select("id,full_name,referral_code,referred_by,role,created_at")
-    .eq("id", user.id)
-    .single();
-
-  if (error || !profile) {
-    message("Profile not found. Please contact the administrator.");
-    return;
-  }
-
-  currentProfile = profile;
-
-  document.getElementById("welcomeName").textContent =
-    profile.full_name || "Member";
-
-  document.getElementById("myId").textContent =
-    profile.referral_code || "Not available";
-
-  document.getElementById("myRole").textContent =
-    profile.role || "member";
-
-  document.getElementById("pName").textContent =
-    profile.full_name || "";
-
-  document.getElementById("pEmail").textContent =
-    user.email || "";
-
-  document.getElementById("pId").textContent =
-    profile.referral_code || "";
-
-  document.getElementById("pRole").textContent =
-    profile.role || "member";
-
-  const link = location.origin + location.pathname +
-    "?ref=" + encodeURIComponent(profile.referral_code || "");
-
-  document.getElementById("myLink").textContent = link;
-
-  const {data: allProfiles, error: listError} = await sb
-    .from("profiles")
-    .select("id,full_name,referral_code,referred_by");
-
-  if (listError) {
-    message("Could not load network. Please try again.");
-    return;
-  }
-
-  const directMembers = allProfiles.filter(
-    x => x.referred_by === user.id
-  );
-
-  document.getElementById("direct").textContent =
-    directMembers.length;
-
-  // Count all descendants in the referral network
-  const descendants = new Set();
-  let parents = [user.id];
-
-  while (parents.length > 0) {
-    const children = allProfiles.filter(
-      x => parents.includes(x.referred_by) &&
-           !descendants.has(x.id)
-    );
-
-    parents = children.map(x => x.id);
-    children.forEach(x => descendants.add(x.id));
-  }
-
-  document.getElementById("total").textContent =
-    descendants.size;
-
-  const memberBox = document.getElementById("members");
-
-  if (directMembers.length === 0) {
-    memberBox.textContent = "No members yet.";
-  } else {
-    memberBox.innerHTML = directMembers.map(x =>
-      '<div class="member">' +
-      escapeText(x.full_name) + ' - ' +
-      escapeText(x.referral_code) +
-      '</div>'
-    ).join("");
-  }
-
-  message("");
-  page("dashboard");
+header h2 {
+  margin: 0;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: 1px;
 }
 
-document.getElementById("regForm").addEventListener("submit", async e => {
-  e.preventDefault();
+header p {
+  color: #dbeafe;
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 0;
+}
 
-  const button = document.getElementById("regButton");
-  button.disabled = true;
-  message("Creating account...");
+/* NAVIGATION */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  background: #ffffff;
+  padding: 12px;
+  box-shadow: 0 3px 12px #123b7015;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
 
-  const fullName = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim().toLowerCase();
-  const password = document.getElementById("password").value;
-  const referralCode = document.getElementById("ref").value.trim();
+nav button {
+  background: #edf4ff;
+  color: #123b70;
+  padding: 10px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+}
 
-  const {data, error} = await sb.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        full_name: fullName,
-        referral_code: referralCode || null
-      }
-    }
-  });
+/* MAIN CONTAINER */
+.container {
+  width: 100%;
+  max-width: 850px;
+  margin: 25px auto;
+  padding: 12px;
+}
 
-  button.disabled = false;
+/* CARDS */
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 22px #123b7010;
+  border: 1px solid #e5edf8;
+}
 
-  if (error) {
-    message("Registration Error: " + error.message);
-    return;
+h3 {
+  color: #123b70;
+  font-size: 21px;
+  margin-top: 0;
+  border-left: 4px solid #e9bd4e;
+  padding-left: 12px;
+}
+
+.card p {
+  color: #536782;
+}
+
+/* INPUTS */
+input {
+  width: 100%;
+  padding: 14px;
+  margin: 9px 0;
+  border: 1px solid #d4dfed;
+  border-radius: 9px;
+  background: #f9fbff;
+  font-size: 15px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #1764b0;
+  box-shadow: 0 0 0 3px #1764b020;
+}
+
+/* BUTTONS */
+button {
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 9px;
+  background: #1764b0;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 5px 0;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #0b3d78;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.full {
+  width: 100%;
+  padding: 15px;
+}
+
+.secondary {
+  background: #eaf1fb;
+  color: #123b70;
+}
+
+.secondary:hover {
+  background: #d8e7fa;
+}
+
+/* HOME PAGE */
+#home {
+  text-align: center;
+  padding: 35px 22px;
+  background: linear-gradient(160deg, #ffffff, #edf5ff);
+  border-top: 4px solid #e9bd4e;
+}
+
+#home h3 {
+  border: 0;
+  padding: 0;
+  font-size: 27px;
+  color: #0c356a;
+}
+
+#home p {
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+/* DASHBOARD INFO */
+.info {
+  background: linear-gradient(135deg, #e9f2ff, #f5f9ff);
+  padding: 18px;
+  border-radius: 12px;
+  border-left: 4px solid #e9bd4e;
+  overflow-wrap: anywhere;
+  color: #123b70;
+}
+
+#dashboard p {
+  padding: 10px;
+  background: #f7faff;
+  border-radius: 8px;
+}
+
+#myId {
+  font-size: 25px;
+  color: #1256a0;
+  letter-spacing: 1px;
+}
+
+/* MEMBERS */
+.member {
+  padding: 14px;
+  border-bottom: 1px solid #e5edf8;
+  color: #173b68;
+  background: #fbfdff;
+  border-radius: 7px;
+  margin: 5px 0;
+}
+
+/* MESSAGE */
+#message {
+  padding: 12px;
+  overflow-wrap: anywhere;
+  color: #1256a0;
+  font-weight: bold;
+  text-align: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 480px) {
+  header {
+    padding: 28px 10px;
   }
 
-  if (data.session) {
-    await showDashboard(data.user);
-  } else {
-    message("Registration successful. Please verify your email, then Login.");
-    page("login");
-  }
-});
-
-document.getElementById("loginForm").addEventListener("submit", async e => {
-  e.preventDefault();
-
-  const button = document.getElementById("loginButton");
-  button.disabled = true;
-  message("Logging in...");
-
-  const email = document.getElementById("loginEmail").value.trim().toLowerCase();
-  const password = document.getElementById("loginPassword").value;
-
-  const {data, error} = await sb.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  button.disabled = false;
-
-  if (error) {
-    message("Login Error: " + error.message);
-    return;
+  header h2 {
+    font-size: 19px;
   }
 
-  await showDashboard(data.user);
-});
+  .container {
+    padding: 10px;
+    margin: 15px auto;
+  }
 
-async function copyLink() {
-  const link = document.getElementById("myLink").textContent;
+  .card {
+    padding: 19px;
+    border-radius: 13px;
+  }
 
-  try {
-    await navigator.clipboard.writeText(link);
-    message("Referral link copied!");
-  } catch (e) {
-    message("Please copy the referral link manually.");
+  #home h3 {
+    font-size: 23px;
+  }
+
+  nav button {
+    padding: 9px 11px;
   }
 }
 
-async function logout() {
-  const {error} = await sb.auth.signOut();
-
-  if (error) {
-    message(error.message);
-    return;
-  }
-
-  currentUser = null;
-  currentProfile = null;
-  message("Logged out successfully.");
-  page("home");
-}
-
-const referral = new URLSearchParams(location.search).get("ref");
-if (referral) {
-  document.getElementById("ref").value = referral;
-}
-
-async function checkLogin() {
-  const {data, error} = await sb.auth.getSession();
-
-  if (error) {
-    message(error.message);
-    return;
-  }
-
-  if (data.session) {
-    await showDashboard(data.session.user);
-  } else {
-    page("home");
-  }
-}
-
-checkLogin();
-</script>
-
-</body>
-</html>
+</head>  
+<body>  <header>  
+<h2>EDUCATION IS BEST NETWORK</h2>  
+<p>FREE REGISTRATION & NETWORKING</p>  
+</header>  <nav id="nav" class="hidden">  
+<button onclick="page('dashboard')">Dashboard</button>  
+<button onclick="page('referral')">Referral</button>  
+<button onclick="page('network')">My Network</button>  
+<button onclick="page('profile')">Profile</button>  
+<button onclick="logout()">Logout</button>  
+</nav>  <div class="container">  <div class="card" id="home">  
+<h3>Welcome to Our Network</h3>  
+<p>Join our free networking platform.</p>  
+<button class="full" onclick="page('register')">FREE REGISTRATION</button>  
+<button class="full secondary" onclick="page('login')">LOGIN</button>  
+</div>  <div class="card hidden" id="register">  
+<h3>Free Registration</h3>  
+<form id="regForm">  
+<input id="name" placeholder="Full Name" required>  
+<input id="email" type="email" placeholder="Email Address" required>  
+<input id="password" type="password" placeholder="Password (8 characters)" minlength="8" required>  
+<input id="ref" placeholder="Referral ID (Optional)">  
+<button class="full" id="regButton">Create Account</button>  
+</form>  
+<button class="secondary" onclick="page('home')">Back</button>  
+</div>  <div class="card hidden" id="login">  
+<h3>Member Login</h3>  
+<form id="loginForm">  
+<input id="loginEmail" type="email" placeholder="Email" required>  
+<input id="loginPassword" type="password" placeholder="Password" required>  
+<button class="full" id="loginButton">Login</button>  
+</form>  
+<button class="secondary" onclick="page('home')">Back</button>  
+</div>  <div class="card hidden" id="dashboard">  
+<h3>Member Dashboard</h3>  
+<p>Welcome, <b id="welcomeName"></b></p>  
+<div class="info">  
+<p>My Referral ID</p>  
+<b id="myId"></b>  
+</div>  
+<p>My Role: <b id="myRole"></b></p>  
+<p>Direct Members: <b id="direct">0</b></p>  
+<p>Total Network: <b id="total">0</b></p>  
+</div>  <div class="card hidden" id="referral">  
+<h3>My Referral Link</h3>  
+<div class="info" id="myLink"></div>  
+<button class="full" onclick="copyLink()">Copy Referral Link</button>  
+</div>  <div class="card hidden" id="network">  
+<h3>My Direct Members</h3>  
+<div id="members">No members yet.</div>  
+</div>  <div class="card hidden" id="profile">  
+<h3>My Profile</h3>  
+<p>Name: <b id="pName"></b></p>  
+<p>Email: <b id="pEmail"></b></p>  
+<p>Referral ID: <b id="pId"></b></p>  
+<p>Role: <b id="pRole"></b></p>  
+</div>  <p id="message"></p>  
+</div>  <script>  
+const SUPABASE_URL = "https://dunsacirxgpgkvfodirn.supabase.co";  
+const SUPABASE_KEY = "sb_publishable_DSJVw_0LOH57cPinEBgsQQ_xU7Y8Zie";  
+  
+const sb = window.supabase.createClient(  
+  SUPABASE_URL,  
+  SUPABASE_KEY  
+);  
+  
+let currentUser = null;  
+let currentProfile = null;  
+  
+function page(id) {  
+  ["home","register","login","dashboard","referral","network","profile"]  
+  .forEach(x => document.getElementById(x).classList.add("hidden"));  
+  
+  document.getElementById(id).classList.remove("hidden");  
+  
+  document.getElementById("nav").classList.toggle(  
+    "hidden",  
+    !["dashboard","referral","network","profile"].includes(id)  
+  );  
+}  
+  
+function message(text) {  
+  document.getElementById("message").textContent = text;  
+}  
+  
+function escapeText(s) {  
+  return String(s || "").replace(/[&<>"']/g, c => ({  
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"  
+  }[c]));  
+}  
+  
+async function showDashboard(user) {  
+  currentUser = user;  
+  
+  message("Loading your account...");  
+  
+  const {data: profile, error} = await sb  
+    .from("profiles")  
+    .select("id,full_name,referral_code,referred_by,role,created_at")  
+    .eq("id", user.id)  
+    .single();  
+  
+  if (error || !profile) {  
+    message("Profile not found. Please contact the administrator.");  
+    return;  
+  }  
+  
+  currentProfile = profile;  
+  
+  document.getElementById("welcomeName").textContent =  
+    profile.full_name || "Member";  
+  
+  document.getElementById("myId").textContent =  
+    profile.referral_code || "Not available";  
+  
+  document.getElementById("myRole").textContent =  
+    profile.role || "member";  
+  
+  document.getElementById("pName").textContent =  
+    profile.full_name || "";  
+  
+  document.getElementById("pEmail").textContent =  
+    user.email || "";  
+  
+  document.getElementById("pId").textContent =  
+    profile.referral_code || "";  
+  
+  document.getElementById("pRole").textContent =  
+    profile.role || "member";  
+  
+  const link = location.origin + location.pathname +  
+    "?ref=" + encodeURIComponent(profile.referral_code || "");  
+  
+  document.getElementById("myLink").textContent = link;  
+  
+  const {data: allProfiles, error: listError} = await sb  
+    .from("profiles")  
+    .select("id,full_name,referral_code,referred_by");  
+  
+  if (listError) {  
+    message("Could not load network. Please try again.");  
+    return;  
+  }  
+  
+  const directMembers = allProfiles.filter(  
+    x => x.referred_by === user.id  
+  );  
+  
+  document.getElementById("direct").textContent =  
+    directMembers.length;  
+  
+  // Count all descendants in the referral network  
+  const descendants = new Set();  
+  let parents = [user.id];  
+  
+  while (parents.length > 0) {  
+    const children = allProfiles.filter(  
+      x => parents.includes(x.referred_by) &&  
+           !descendants.has(x.id)  
+    );  
+  
+    parents = children.map(x => x.id);  
+    children.forEach(x => descendants.add(x.id));  
+  }  
+  
+  document.getElementById("total").textContent =  
+    descendants.size;  
+  
+  const memberBox = document.getElementById("members");  
+  
+  if (directMembers.length === 0) {  
+    memberBox.textContent = "No members yet.";  
+  } else {  
+    memberBox.innerHTML = directMembers.map(x =>  
+      '<div class="member">' +  
+      escapeText(x.full_name) + ' - ' +  
+      escapeText(x.referral_code) +  
+      '</div>'  
+    ).join("");  
+  }  
+  
+  message("");  
+  page("dashboard");  
+}  
+  
+document.getElementById("regForm").addEventListener("submit", async e => {  
+  e.preventDefault();  
+  
+  const button = document.getElementById("regButton");  
+  button.disabled = true;  
+  message("Creating account...");  
+  
+  const fullName = document.getElementById("name").value.trim();  
+  const email = document.getElementById("email").value.trim().toLowerCase();  
+  const password = document.getElementById("password").value;  
+  const referralCode = document.getElementById("ref").value.trim();  
+  
+  const {data, error} = await sb.auth.signUp({  
+    email,  
+    password,  
+    options: {  
+      data: {  
+        full_name: fullName,  
+        referral_code: referralCode || null  
+      }  
+    }  
+  });  
+  
+  button.disabled = false;  
+  
+  if (error) {  
+    message("Registration Error: " + error.message);  
+    return;  
+  }  
+  
+  if (data.session) {  
+    await showDashboard(data.user);  
+  } else {  
+    message("Registration successful. Please verify your email, then Login.");  
+    page("login");  
+  }  
+});  
+  
+document.getElementById("loginForm").addEventListener("submit", async e => {  
+  e.preventDefault();  
+  
+  const button = document.getElementById("loginButton");  
+  button.disabled = true;  
+  message("Logging in...");  
+  
+  const email = document.getElementById("loginEmail").value.trim().toLowerCase();  
+  const password = document.getElementById("loginPassword").value;  
+  
+  const {data, error} = await sb.auth.signInWithPassword({  
+    email,  
+    password  
+  });  
+  
+  button.disabled = false;  
+  
+  if (error) {  
+    message("Login Error: " + error.message);  
+    return;  
+  }  
+  
+  await showDashboard(data.user);  
+});  
+  
+async function copyLink() {  
+  const link = document.getElementById("myLink").textContent;  
+  
+  try {  
+    await navigator.clipboard.writeText(link);  
+    message("Referral link copied!");  
+  } catch (e) {  
+    message("Please copy the referral link manually.");  
+  }  
+}  
+  
+async function logout() {  
+  const {error} = await sb.auth.signOut();  
+  
+  if (error) {  
+    message(error.message);  
+    return;  
+  }  
+  
+  currentUser = null;  
+  currentProfile = null;  
+  message("Logged out successfully.");  
+  page("home");  
+}  
+  
+const referral = new URLSearchParams(location.search).get("ref");  
+if (referral) {  
+  document.getElementById("ref").value = referral;  
+}  
+  
+async function checkLogin() {  
+  const {data, error} = await sb.auth.getSession();  
+  
+  if (error) {  
+    message(error.message);  
+    return;  
+  }  
+  
+  if (data.session) {  
+    await showDashboard(data.session.user);  
+  } else {  
+    page("home");  
+  }  
+}  
+  
+checkLogin();  
+</script>  </body>  
+</html>  
