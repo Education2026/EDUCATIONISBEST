@@ -263,7 +263,52 @@ button:disabled {
     padding: 9px 11px;
   }
 }
-</style
+  
+/* SQUARE CARD DESIGN */
+#home .full {
+  width: calc(50% - 12px);
+  aspect-ratio: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
+  margin: 6px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
+
+#nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+#nav button {
+  width: 95px;
+  height: 85px;
+  border-radius: 15px;
+  font-weight: bold;
+  white-space: normal;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+#home .full:hover,
+#nav button:hover {
+  transform: translateY(-3px);
+}
+
+@media (max-width: 360px) {
+  #nav button {
+    width: 85px;
+    height: 80px;
+  }
+}
+
+</style>
 </head>  
 <body>  <header>  
 <h2>EDUCATION IS BEST NETWORK</h2>  
