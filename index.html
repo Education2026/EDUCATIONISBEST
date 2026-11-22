@@ -269,6 +269,45 @@ button:disabled {
 /* DASHBOARD SQUARE CARDS */
   
 /* REFERRAL PAGE DESIGN */
+  
+/* MY NETWORK DESIGN */
+#network {
+  text-align: center;
+}
+
+#network h3 {
+  color: #123b70;
+}
+
+#members {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+#members .member {
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 14px;
+  border: 1px solid #d8e6fa;
+  border-bottom: 4px solid #e9bd4e;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #ffffff, #eaf2ff);
+  box-shadow: 0 4px 12px rgba(18, 59, 112, 0.08);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 360px) {
+  #members {
+    grid-template-columns: 1fr;
+  }
+}
+
 #referral {
   text-align: center;
 }
