@@ -24,6 +24,16 @@ nav button{font-size:12px}
 .member{padding:10px;border-bottom:1px solid #ddd}
 small{color:#68768a}
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://dunsacirxgpgkvfodirn.supabase.co/rest/v1/";
+const SUPABASE_KEY = "sb_publishable_DSJVw_0LOH57cPinEBgsQQ_xU7Y8Zie";
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+</script>
 </head>
 <body>
 
