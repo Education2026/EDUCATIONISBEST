@@ -500,15 +500,23 @@ button:disabled {
 <button class="full" id="regButton">Create Account</button>  
 </form>  
 <button class="secondary" onclick="page('home')">Back</button>  
-</div>  <div class="card hidden" id="login">  
-<h3>Member Login</h3>  
-<form id="loginForm">  
-<input id="loginEmail" type="email" placeholder="Email" required>  
-<input id="loginPassword" type="password" placeholder="Password" required>  
-<button class="full" id="loginButton">Login</button>  
-</form>  
-<button class="secondary" onclick="page('home')">Back</button>  
-</div>  <div class="card hidden" id="dashboard">  
+</div> 
+<div class="card hidden" id="login">
+  <h3>Member Login</h3>
+
+  <form id="loginForm">
+    <input id="loginEmail" type="email" placeholder="Email" required>
+    <input id="loginPassword" type="password" placeholder="Password" required>
+    <button class="full" id="loginButton">Login</button>
+  </form>
+
+  <button class="secondary full" onclick="forgotPassword()">
+    Forgot Password?
+  </button>
+
+  <button class="secondary" onclick="page('home')">Back</button>
+</div>
+ <div class="card hidden" id="dashboard">  
 <h3>Member Dashboard</h3>  
 <p>Welcome, <b id="welcomeName"></b></p>  
 <div class="info">  
