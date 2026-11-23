@@ -660,14 +660,20 @@ const sb = window.supabase.createClient(
   
 let currentUser = null;  
 let currentProfile = null;  
-  
 
 function page(id) {
   const pages = [
-  "home", "register", "login",
-"dashboard", "referral",
-"network", "profile", "awareness",
-"resetPassword"
+    "home",
+    "register",
+    "login",
+    "dashboard",
+    "referral",
+    "network",
+    "profile",
+    "awareness",
+    "resetPassword"
+  ];
+
   pages.forEach(function(x) {
     const el = document.getElementById(x);
     if (el) {
@@ -698,7 +704,6 @@ function page(id) {
   }
 }
 
-  
 function message(text) {  
   document.getElementById("message").textContent = text;  
 }  
