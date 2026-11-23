@@ -709,7 +709,81 @@ async function showDashboard(user) {
   message("");  
   page("dashboard");  
 }  
-  
+  async function loadAwareness() {
+  const form = document.getElementById("awarenessAdminForm");
+  const box = document.getElementById("awarenessPosts");
+
+  form.classList.toggle(
+    "hidden",
+    !currentProfile || currentProfile.role !== "founder"
+  );
+
+  box.textContent = "Loading information...";
+
+  const {data, error} = await sb
+    .from("awareness_posts")
+    .select("id,title,category,content,created_at")
+    .order("created_at", {ascending: false});
+
+  if (error) {
+    box.textContent = "Could not load information: " + error.message;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    box.textContent = "No information published yet.";
+    return;
+  }
+
+  box.innerHTML = data.map(post =>
+    '<div class="member">' +
+    '<h3>' + escapeText(post.title) + '</h3>' +
+    '<p><b>Category:</b> ' + escapeText(post.category) + '</p>' +
+    '<p>' + escapeText(post.content).replace(/\n/g, "<br>") + '</p>' +
+    '</div>'
+  ).join("");
+}
+
+async function publishAwareness() {
+  if (!currentUser || !currentProfile ||
+      currentProfile.role !== "founder") {
+    message("Only Founder can publish information.");
+    return;
+  }
+
+  const title = document.getElementById("awarenessTitle").value.trim();
+  const category = document.getElementById("awarenessCategory").value;
+  const content = document.getElementById("awarenessContent").value.trim();
+
+  if (!title || !category || !content) {
+    message("Please fill all information.");
+    return;
+  }
+
+  message("Publishing information...");
+
+  const {error} = await sb
+    .from("awareness_posts")
+    .insert({
+      title: title,
+      category: category,
+      content: content,
+      created_by: currentUser.id
+    });
+
+  if (error) {
+    message("Publish Error: " + error.message);
+    return;
+  }
+
+  document.getElementById("awarenessTitle").value = "";
+  document.getElementById("awarenessCategory").value = "";
+  document.getElementById("awarenessContent").value = "";
+
+  message("Information published successfully!");
+
+  await loadAwareness();
+}
 document.getElementById("regForm").addEventListener("submit", async e => {  
   e.preventDefault();  
   
