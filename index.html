@@ -594,21 +594,44 @@ const sb = window.supabase.createClient(
 let currentUser = null;  
 let currentProfile = null;  
   
+
 function page(id) {
-  ["home","register","login","dashboard","referral","network","profile","awareness"]
-  .forEach(x => document.getElementById(x).classList.add("hidden"));
+  const pages = [
+    "home", "register", "login",
+    "dashboard", "referral",
+    "network", "profile", "awareness"
+  ];
 
-  document.getElementById(id).classList.remove("hidden");
+  pages.forEach(function(x) {
+    const el = document.getElementById(x);
+    if (el) {
+      el.classList.add("hidden");
+    }
+  });
 
-  document.getElementById("nav").classList.toggle(
-    "hidden",
-    !["dashboard","referral","network","profile","awareness"].includes(id)
-  );
+  const selectedPage = document.getElementById(id);
 
-  if (id === "awareness") {
+  if (!selectedPage) {
+    console.error("Page not found:", id);
+    return;
+  }
+
+  selectedPage.classList.remove("hidden");
+
+  const nav = document.getElementById("nav");
+
+  if (nav) {
+    nav.classList.toggle(
+      "hidden",
+      !["dashboard", "referral", "network", "profile", "awareness"].includes(id)
+    );
+  }
+
+  if (id === "awareness" && typeof loadAwareness === "function") {
     loadAwareness();
   }
 }
+
   
 function message(text) {  
   document.getElementById("message").textContent = text;  
