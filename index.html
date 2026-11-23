@@ -548,13 +548,38 @@ button:disabled {
 </div>  <div class="card hidden" id="network">  
 <h3>My Direct Members</h3>  
 <div id="members">No members yet.</div>  
-</div>  <div class="card hidden" id="profile">  
-<h3>My Profile</h3>  
-<p>Name: <b id="pName"></b></p>  
-<p>Email: <b id="pEmail"></b></p>  
-<p>Referral ID: <b id="pId"></b></p>  
-<p>Role: <b id="pRole"></b></p>  
-</div> <div class="card hidden" id="awareness">
+</div> 
+<div class="card hidden" id="profile">
+  <h3>My Account</h3>
+  <p>Member Profile</p>
+
+  <h3>PROFILE SETTINGS</h3>
+
+  <div class="member">
+    <h4>Edit Name</h4>
+    <input id="editName" type="text" placeholder="Enter your new name">
+    <button class="full" onclick="updateName()">Save Name</button>
+  </div>
+
+  <div class="member">
+    <h4>Change Email</h4>
+    <input id="newEmail" type="email" placeholder="Enter new email">
+    <button class="full" onclick="changeEmail()">Update Email</button>
+  </div>
+
+  <div class="member">
+    <h4>Change Password</h4>
+    <input id="newPassword" type="password" placeholder="New password (8 characters)" minlength="8">
+    <button class="full" onclick="changePassword()">Update Password</button>
+  </div>
+
+  <div class="member">
+    <h4>Forgot Password</h4>
+    <button class="full" onclick="forgotPassword()">Reset Password by Email</button>
+  </div>
+</div>
+
+  <div class="card hidden" id="awareness">
   <h3>Education & Awareness Center</h3>
   <p>ଶିକ୍ଷା ଓ ସଚେତନତା କେନ୍ଦ୍ର</p>
 
