@@ -810,7 +810,20 @@ document.getElementById("regForm").addEventListener("submit", async e => {
       }  
     }  
   });  
-  
+  button.disabled = false;
+
+  if (error) {
+    message("Registration Error: " + error.message);
+    return;
+  }
+
+  if (data.session) {
+    await showDashboard(data.user);
+  } else {
+    message("Registration successful. Please verify your email, then Login.");
+    page("login");
+  }
+});
   button.disabled = false;  
   
   if (error) {  
