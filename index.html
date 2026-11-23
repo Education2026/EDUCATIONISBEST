@@ -549,9 +549,17 @@ button:disabled {
 <h3>My Direct Members</h3>  
 <div id="members">No members yet.</div>  
 </div> 
+
 <div class="card hidden" id="profile">
   <h3>My Account</h3>
   <p>Member Profile</p>
+
+  <div class="member">
+    <p>Name: <b id="pName"></b></p>
+    <p>Email: <b id="pEmail"></b></p>
+    <p>Referral ID: <b id="pId"></b></p>
+    <p>Role: <b id="pRole"></b></p>
+  </div>
 
   <h3>PROFILE SETTINGS</h3>
 
@@ -569,7 +577,7 @@ button:disabled {
 
   <div class="member">
     <h4>Change Password</h4>
-    <input id="newPassword" type="password" placeholder="New password (8 characters)" minlength="8">
+    <input id="newPassword" type="password" placeholder="New password (minimum 8 characters)">
     <button class="full" onclick="changePassword()">Update Password</button>
   </div>
 
