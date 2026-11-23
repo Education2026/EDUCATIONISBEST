@@ -854,16 +854,6 @@ document.getElementById("loginForm").addEventListener("submit", async e => {
     password  
   });  
   
-  button.disabled = false;  
-  
-  if (error) {  
-    message("Login Error: " + error.message);  
-    return;  
-  }  
-  
-  await showDashboard(data.user);  
-});  
-  
 async function copyLink() {  
   const link = document.getElementById("myLink").textContent;  
   
