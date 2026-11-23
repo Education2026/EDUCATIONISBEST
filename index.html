@@ -590,17 +590,21 @@ const sb = window.supabase.createClient(
 let currentUser = null;  
 let currentProfile = null;  
   
-function page(id) {  
-  ["home","register","login","dashboard","referral","network","profile"]  
-  .forEach(x => document.getElementById(x).classList.add("hidden"));  
-  
-  document.getElementById(id).classList.remove("hidden");  
-  
-  document.getElementById("nav").classList.toggle(  
-    "hidden",  
-    !["dashboard","referral","network","profile"].includes(id)  
-  );  
-}  
+function page(id) {
+  ["home","register","login","dashboard","referral","network","profile","awareness"]
+  .forEach(x => document.getElementById(x).classList.add("hidden"));
+
+  document.getElementById(id).classList.remove("hidden");
+
+  document.getElementById("nav").classList.toggle(
+    "hidden",
+    !["dashboard","referral","network","profile","awareness"].includes(id)
+  );
+
+  if (id === "awareness") {
+    loadAwareness();
+  }
+}
   
 function message(text) {  
   document.getElementById("message").textContent = text;  
