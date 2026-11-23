@@ -516,7 +516,33 @@ button:disabled {
 
   <button class="secondary" onclick="page('home')">Back</button>
 </div>
- <div class="card hidden" id="dashboard">  
+ 
+<div class="card hidden" id="resetPassword">
+  <h3>Reset Your Password</h3>
+  <p>Enter your new password below.</p>
+
+  <form id="resetPasswordForm">
+    <input
+      id="resetNewPassword"
+      type="password"
+      placeholder="Enter New Password"
+      minlength="8"
+      required
+    >
+    <input
+      id="resetConfirmPassword"
+      type="password"
+      placeholder="Confirm New Password"
+      minlength="8"
+      required
+    >
+    <button class="full" id="resetPasswordButton">
+      Update Password
+    </button>
+  </form>
+</div>
+
+<div class="card hidden" id="dashboard">  
 <h3>Member Dashboard</h3>  
 <p>Welcome, <b id="welcomeName"></b></p>  
 <div class="info">  
