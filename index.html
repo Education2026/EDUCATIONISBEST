@@ -936,6 +936,32 @@ document.getElementById("loginForm").addEventListener("submit", async e => {
   }
 });
 
+async function forgotPassword() {
+  const email = document.getElementById("loginEmail").value.trim();
+
+  if (!email) {
+    message("Please enter your registered email first.");
+    return;
+  }
+
+  try {
+    message("Sending password reset link...");
+
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://education2026.github.io/EDUCATIONISBEST/"
+    });
+
+    if (error) {
+      message("Error: " + error.message);
+      return;
+    }
+
+    message("Password reset link sent. Please check your email.");
+  } catch (err) {
+    message("Error: " + err.message);
+  }
+}
+
 async function copyLink() {  
   const link = document.getElementById("myLink").textContent;  
   
