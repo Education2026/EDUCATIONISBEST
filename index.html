@@ -637,11 +637,17 @@ function message(text) {
   document.getElementById("message").textContent = text;  
 }  
   
-function escapeText(s) {  
-  return String(s || "").replace(/[&<>"']/g, c => ({  
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"  
-  }[c]));  
-}  
+
+function escapeText(s) {
+  return String(s || "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[c]));
+}
+
   
 async function showDashboard(user) {  
   currentUser = user;  
